@@ -13,7 +13,6 @@ app.use("/public", express.static("public"));
 
 app.use("/livros", livroRouter);
 app.use("/usuarios", usuarioRouter);
-console.log(process.env.DB_HOST);
 
 app.listen(port, () => {
   initAdmin();
