@@ -1,0 +1,29 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args: ["APP_PORT=${APP_PORT}"]
+    env_file: [.env]
+    ports: ["${APP_PORT}:${APP_PORT}"]
+    restart: always
+    depends_on: [db, migrations]
+
+  migrations:
+    image: node:20.11-alpine # modificar
+    env_file: [.env]
+    restart: on-failure
+    working_dir: /migrate
+    volumes: [./prisma/:/migrate/prisma]
+    command: npx prisma migrate deploy
+    depends_on: [db]
+
+  db:
+    image: mysql:8.0.36-debian # modificar
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    env_file: [.env]
+    volumes: [mysqldata:/var/lib/mysql]
+    ports: ["127.0.0.1:${DB_PORT}:${DB_PORT}"]
+volumes:
+  mysqldata:

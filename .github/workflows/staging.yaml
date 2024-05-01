@@ -1,0 +1,26 @@
+name: Staging on Digital Ocean Droplet
+run-name: ${{ github.actor }} is deploying to staging environment
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - staging # nome da branch que será atualizada com o github workflow
+jobs:
+  ssh-into-droplet-and-deploy-changes:
+    name: SSH into droplet and deploy changes
+    runs-on: ubuntu-22.04
+    steps:
+      - name: SSH into droplet
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST }} # secrets do github workflow
+          username: root
+          password: ${{secrets.PASSWORD}} # secrets do github workflow
+          port: ${{ secrets.PORT }} # secrets do github workflow
+          script_stop: true
+          script: |
+            cd /home/equipe2
+            git checkout staging
+            git pull
+            docker compose down
+            docker compose up -d --build --force-recreate --remove-orphans
