@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon app.js",
     "prisma:migrate-dev": "prisma migrate dev",
-    "start": "node src/app.js"
+    "start": "node app.js"
   },
   "author": "Tomás Lavez",
   "license": "ISC",
