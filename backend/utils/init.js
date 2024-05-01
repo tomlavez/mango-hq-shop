@@ -21,24 +21,24 @@ export const initAdmin = async () => {
   const user = await prisma.usuario.create({
     // criando o usuário
     data: {
-        // as informações serão enviadas no body da requisição
-        email: "admin@gmail.com",
-        senha: "admin1234",
-        role: true,
-        pedido: {
-            create: {
-                valor: 0,
-                livro: { create: [] },
-            },
+      // as informações serão enviadas no body da requisição
+      email: "admin@gmail.com",
+      senha: "admin1234",
+      role: true,
+      pedido: {
+        create: {
+          valor: 0,
+          livro: { create: [] },
         },
-        perfil: {
-            create: {
-                nome: "admin show de bola",
-                telefone: "1234-5678",
-                },
-            },
+      },
+      perfil: {
+        create: {
+          nome: "admin show de bola",
+          telefone: "1234-5678",
         },
-    });
+      },
+    },
+  });
 
   console.log({
     // retornando informações do usuário criado
@@ -50,22 +50,24 @@ export const initAdmin = async () => {
 export const initLivros = async () => {
   // verificando se existem livros na base de dados
   let count = await prisma.livro.count();
-  if (count > 0){
-    console.log("Livros já existem na base de dados!")
+  if (count > 0) {
+    console.log("Livros já existem na base de dados!");
 
-   return;
+    return;
   }
 
   // se não existirem livros, a api será populada com livros
   initManga();
   initGraphicNovels();
 
-  console.log("Api populada com sucesso!")
-}
+  console.log("Api populada com sucesso!");
+};
 
 const initManga = async () => {
   // buscando livros do tipo mangá
-  const response = await fetch("https://www.googleapis.com/books/v1/volumes?q=%20Mang%C3%A1&maxResults=20");
+  const response = await fetch(
+    "https://www.googleapis.com/books/v1/volumes?q=%20Mang%C3%A1&maxResults=20"
+  );
 
   const data = await response.json();
 
@@ -75,15 +77,15 @@ const initManga = async () => {
       where: {
         titulo: item.volumeInfo.title,
       },
-      })
+    });
     // se o livro não existir e o livro possuir uma capa, ele será criado
-    if (!livro && 'imageLinks' in item.volumeInfo) {
-      let autores = "Autores não informados!"
+    if (!livro && "imageLinks" in item.volumeInfo) {
+      let autores = "Autores não informados!";
       if (item.volumeInfo.authors) {
-        autores = ""
+        autores = "";
         item.volumeInfo.authors.forEach((autor) => {
-          autores += autor + "; "
-        })
+          autores += autor + "; ";
+        });
       }
       await prisma.livro.create({
         data: {
@@ -96,11 +98,13 @@ const initManga = async () => {
       });
     }
   });
-}
+};
 
 const initGraphicNovels = async () => {
   // buscando livros do tipo graphic novels
-  const response = await fetch("https://www.googleapis.com/books/v1/volumes?q=subject:%20Graphic%20Novels&maxResults=20");
+  const response = await fetch(
+    "https://www.googleapis.com/books/v1/volumes?q=subject:%20Graphic%20Novels&maxResults=20"
+  );
 
   const data = await response.json();
 
@@ -110,15 +114,15 @@ const initGraphicNovels = async () => {
       where: {
         titulo: item.volumeInfo.title,
       },
-      })
+    });
     // se o livro não existir, ele será criado
-    if (!livro && 'imageLinks' in item.volumeInfo) {
-      let autores = "Autores não informados!"
+    if (!livro && "imageLinks" in item.volumeInfo) {
+      let autores = "Autores não informados!";
       if (item.volumeInfo.authors) {
-        autores = ""
+        autores = "";
         item.volumeInfo.authors.forEach((autor) => {
-          autores += autor + "; "
-        })
+          autores += autor + "; ";
+        });
       }
       await prisma.livro.create({
         data: {
@@ -131,4 +135,4 @@ const initGraphicNovels = async () => {
       });
     }
   });
-}
+};
