@@ -1,3 +1,4 @@
+
 import express from 'express'
 import * as usuarioController from '../Controllers/usuario.controllers.js'
 
@@ -16,3 +17,4 @@ router.delete('/:usuarioId', usuarioController.deletarUsuario) // rota para dele
 router.post("/login", usuarioController.login); // rota para login do usuário
 
 export default router
+
