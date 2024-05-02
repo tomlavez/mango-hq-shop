@@ -1,3 +1,4 @@
+
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -96,3 +97,4 @@ export const deletarLivro = async (req, res) => {
     msg: "Livro deletado com sucesso!",
   });
 };
+
