@@ -86,3 +86,40 @@ export const removerDoCarrinho = async (req, res) => {
     msg: "Produto removido com sucesso!",
   });
 };
+
+export const finalizarCompra = async (req, res) => {
+  const pedido = await prisma.pedido.findFirst({
+    select: {
+        livro: true,
+    }
+  });
+
+  if (pedido.livro.length === 0) {
+    return res.status(400).json({
+      msg: "Não há produtos no carrinho para finalizar a compra.",
+    });
+  }
+
+  console.log(pedido)
+
+  pedido.livro.forEach(async (p) => {
+    const livro = await prisma.livro.update({
+      where: {
+        id: p.id,
+      },
+      data: {
+        estoque: {
+          decrement: 1,
+        },
+        pedido: {
+            set: []
+        }
+      },
+    });
+  });
+
+  res.status(200).json({
+    msg: "Compra finalizada com sucesso!",
+  });
+
+}
