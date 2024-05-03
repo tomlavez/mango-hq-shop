@@ -100,8 +100,6 @@ export const finalizarCompra = async (req, res) => {
     });
   }
 
-  console.log(pedido)
-
   pedido.livro.forEach(async (p) => {
     const livro = await prisma.livro.update({
       where: {
