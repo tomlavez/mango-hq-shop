@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export default function adminLevel(req, res, next) {
+export default function userLevel(req, res, next) {
   const authenticator = req.headers["authorization"]; // procura por um autenticador no header
 
   if (!authenticator) {
@@ -17,19 +17,17 @@ export default function adminLevel(req, res, next) {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
       if (err) {
         // token inválido
-        return res.status(401).json({
+        return res.status(403).json({
           data: user,
           token: token,
           msg: `Token para o usuário enviado é inválido`,
         });
       }
 
-      if (!user.role) {
-        // usuário não é um administrador
+      if (user.id !== req.body.id) {
         return res.status(403).json({
-          data: user,
           token: token,
-          msg: `O usuário deve ser um administrador para poder acessar essa rota.`,
+          msg: `O usuário que está tentando acessar essa rota não é o usuário dono desse perfil`,
         });
       }
 
