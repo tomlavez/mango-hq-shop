@@ -1,6 +1,9 @@
+
 import express from "express";
 import livroRouter from "./Routes/livro.routes.js";
 import usuarioRouter from "./Routes/usuario.routes.js";
+import carrinhoRouter from "./Routes/carrinho.routes.js";
+import userLevel from "./middlewares/base.middleware.js";
 import { initAdmin, initLivros } from "./utils/init.js";
 
 import "dotenv/config"; // importando o dotenv para carregar as variáveis de ambiente
@@ -13,6 +16,8 @@ app.use("/public", express.static("public"));
 
 app.use("/livros", livroRouter);
 app.use("/usuarios", usuarioRouter);
+
+app.use("/carrinho", userLevel, carrinhoRouter);
 
 app.listen(port, () => {
   initAdmin();
