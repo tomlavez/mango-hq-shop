@@ -6,8 +6,10 @@ import carrinhoRouter from "./Routes/carrinho.routes.js";
 import userLevel from "./middlewares/base.middleware.js";
 import { initAdmin, initLivros } from "./utils/init.js";
 
+import "dotenv/config"; // importando o dotenv para carregar as variáveis de ambiente
+
 const app = express();
-const port = 3000;
+const port = process.env.APP_PORT || 3000;
 
 app.use(express.json());
 app.use("/public", express.static("public"));
