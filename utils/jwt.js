@@ -1,3 +1,4 @@
+
 import jwt from "jsonwebtoken"
 
 // gerando token de autenticação (expira em 30 minutos)
