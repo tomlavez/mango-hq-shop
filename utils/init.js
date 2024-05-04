@@ -1,4 +1,3 @@
-
 // criar um usuario administrador para poder criar os produtos mais facilmente durante o desenvolvimento
 
 import { PrismaClient } from "@prisma/client";
@@ -133,4 +132,3 @@ const initGraphicNovels = async () => {
     }
   });
 }
-
